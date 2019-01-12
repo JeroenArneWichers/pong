@@ -9,17 +9,74 @@
     <script src="main.js"></script>
 </head>
 <body>
-test
 <script>
 
+/*
+set variables properties of the canvas and key connections
+*/
 var WIDTH = 700, HEIGHT = 600, pi=Math.PI;
+
+/*
+Elements of the game
+*/
 var canvas, ctx, keystate;
 var player, ai, ball;
+
+/*
+Player tennis racket drawing
+*/
+player = 
+    {
+	x: null,
+	y: null,
+	width: 20, //the width of the player tennis racket
+	height: 100, //the height of the player tennis racket
+    }
+
+/*
+Computer tennis racket
+*/
+ai = 
+    {
+	x: null,
+	y:null,
+	width: 20, //the width of the player tennis racket
+	height: 100, //the height of the player tennis racket
+	
+	update: function() {},
+    }
+
+/*
+tennis ball
+*/
+ball = 
+    {
+	x: null,
+	y: null,
+	vel: null,
+	side: 20, //the width and height of the tennis ball
+	speed: 5, //the speed of the tennis ball
+    }
 
 
 function main()
 {
+    canvas = document.createElement("canvas");
+    canvas.width = WIDTH; //to set the canvas width equal to the above width variable
+    canvas.height = HEIGHT; //to set the canvas width equal to the above height variable
+    ctx = canvas.getContext("2d");
+    document.body.appendChild(canvas);
 
+    init();
+		
+    var loop = function()
+        {
+        update();
+        draw();
+        
+        window.requestAnimationFrame(loop, canvas);
+        };
+    window.requestAnimationFrame(loop, canvas);
 }
 
 function init()
