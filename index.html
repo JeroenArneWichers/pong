@@ -25,6 +25,8 @@ set variables properties of the canvas and key connections
 WIDTH = 700, //the width of the canvas(play field)
 HEIGHT = 600, //the height of the canvas(play field)
 pi=Math.PI;
+var UpArrow=38; //to connect the variable to the correct key. In this case the up arrow key
+var DownArrow=40; //to connect the variable to the correct key. In this case the down arrow key
 
 /*
 Elements of the game
@@ -40,6 +42,15 @@ player = {
 	y: null,
 	width: 20, //the width of the player tennis racket
 	height: 100, //the height of the player tennis racket
+	
+/*
+Player tennis racket update after button press
+*/
+	update: function() 
+	{
+		if (keystate[UpArrow]) this.y -= 7; //after up arrow key is pressed shift on the y plane -7 pixels
+		if (keystate[DownArrow]) this.y += 7; //after down arrow key is pressed shift on the y plane +7 pixels
+	},
 
 /*
 Player tennis racket drawing
@@ -49,6 +60,7 @@ Player tennis racket drawing
 		ctx.fillRect(this.x, this.y, this.width, this.height); //Tell it to create/draw a rectangle using the widht and height as paramaters
 		}
 	};
+
 /*
 Computer tennis racket
 */	
@@ -68,7 +80,7 @@ computer tennis racket drawing
 		ctx.fillRect(this.x, this.y, this.width, this.height); //Tell it to create/draw a rectangle using the widht and height as paramaters
 		}
 	};
-
+	
 /*
 tennis ball
 */
@@ -86,6 +98,28 @@ tennis ball update and confing to canvas
 	{
 		this.x += this.vel.x;
 		this.y += this.vel.y;
+
+		if (0 > this.y || this.y+this.side > HEIGHT) //check if the tennis ball connects to the top or the bottom of the canvas (the total height)
+		{
+			var offset = this.vel.y < 0 ? 0 - this.y : HEIGHT - (this.y+this.side); 
+			this.y += 2*offset; //to prevent the tennis ball from going inside the canvas border
+			this.vel.y *= -1; //should the tennis ball connect to the top or bottom mirror/reverse velocity
+		}
+
+		var AABBIntersect = function(ax, ay, aw, ah, bx, by, bw, bh) //axis aligned bounding box test. ax,ay,aw,ah are the x and y positions and the width and height of the box.
+		{
+			return ax < bx+bw && ay < by+bh && bx <ax+aw && by < ay+ah; //check if the tennis ball connects to any area of the tennis rackets. If so return false
+		};
+
+		var pdle = this.vel.x < 0 ? player : ai; // to only check the player tennis racket if the tennis ball is going to the player side. And vice versa. 
+		if (AABBIntersect(pdle.x, pdle.y, pdle.width, pdle.height, //To check if the tennis racket intersects with...
+				this.x, this.y, this.side, this.side) //...the tennis ball.
+			) 
+			{
+				var n = (this.y+this.side - pdle.y)/(pdle.height+this.side);
+				var phi = (2*n -1); //0.25*pi*(will give value between 1 and -1.)
+				this.vel.x *= -1; //if the tennis ball connects reverse velecity on the x plane. ie send it backwards.
+			}
 	},
 
 /*
@@ -100,76 +134,98 @@ tennis ball drawing
 /*
 start of the game
 */
-function main()
-{
-    canvas = document.createElement("canvas");
-    canvas.width = WIDTH; //to set the canvas width equal to the above width variable
-    canvas.height = HEIGHT; //to set the canvas width equal to the above height variable
-    ctx = canvas.getContext("2d");
-    document.body.appendChild(canvas);
+function main() 
+	{
+		canvas = document.createElement("canvas");
+		canvas.width = WIDTH; //to set the canvas width equal to the above width variable
+		canvas.height = HEIGHT; //to set the canvas width equal to the above height variable
+		ctx = canvas.getContext("2d");
+		document.body.appendChild(canvas);
 
-    init();
+		keystate = {};
+		document.addEventListener("keydown", function(evt) 
+		{
+			keystate[evt.keyCode] = true;
+		});
+		document.addEventListener("keyup", function(evt) 
+		{
+			delete keystate [evt.keyCode];
+		});
 		
-    var loop = function()
-        {
-        update();
-        draw();
-        
-        window.requestAnimationFrame(loop, canvas);
-        };
-    window.requestAnimationFrame(loop, canvas);
-}
+		init();
+		
+		var loop = function()
+			{
+			update();
+			draw();
+			
+			window.requestAnimationFrame(loop, canvas);
+			};
+		window.requestAnimationFrame(loop, canvas);
+	}
 
 /*
 start of the game and start positions
 */
-function init()
-{
-    player.x = player.width;
-    player.y = (HEIGHT - player.height)/2;
-    
-    ai.x = WIDTH - (player.width + ai.width);
-    ai.y = (HEIGHT - ai.height)/2;
-    
-    ball.x = (WIDTH - ball.side)/2;
-    ball.y = (HEIGHT - ball.side)/2;
-}
+function init() 
+	{
+		player.x = player.width;
+		player.y = (HEIGHT - player.height)/2;
+		
+		ai.x = WIDTH - (player.width + ai.width);
+		ai.y = (HEIGHT - ai.height)/2;
+		
+		ball.x = (WIDTH - ball.side)/2;
+		ball.y = (HEIGHT - ball.side)/2;
 
-function update()
-{
-    ball.update();
-    player.update();
-    ai.update();
-}
+		ball.vel = //direction of the tennis ball on start. In this case it goes along the x plane.
+		{
+			x: ball.speed, 
+			y: 0
+		}
+	}
+
+/*
+update all the game objects
+*/
+function update() 
+	{
+		ball.update();
+		player.update();
+		ai.update();
+	}
 
 /*
 draw all game objects and net
 */
-function draw()
-{
-    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+function draw() 	
+	{
+		ctx.fillRect(0, 0, WIDTH, HEIGHT);
 		
-	ctx.save();
+		ctx.save();
 		
-	ctx.fillStyle = "#fff";
+		ctx.fillStyle = "#fff";
+		
+		ball.draw();
+		player.draw();
+		ai.draw();
 
-    ball.draw();
-    player.draw();
-    ai.draw();
+		var w = 4;
+		var x = (WIDTH - w)*0.5;
+		var y = 0;
+		var step = HEIGHT/20;
+		while (y< HEIGHT)
+			{
+				ctx.fillRect(x, y+step*0.25, w, step*0.5);
+				y += step;
+			}
 
-    var w = 4;
-    var x = (WIDTH - w)*0.5;
-    var y = 0;
-    var step = HEIGHT/20;
-    while (y< HEIGHT)
-        {
-            ctx.fillRect(x, y+step*0.25, w, step*0.5);
-            y += step;
-        }
+		ctx.restore();
+	}
 
-    ctx.restore();
-}
-
+/*
+start and run the game
+*/
 main();
 
 
