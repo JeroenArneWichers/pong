@@ -176,6 +176,13 @@ tennis ball update and confine to canvas
 			var soundFlag = true; //set the sound flag variable to true.
 			if (0 > this.x+this.side || this.x > WIDTH) //if the ball goes of the field it starts once again from the starting position.
 			{
+				if (soundFlag) //if the sound variable is true play the sound associated with varialbe paddlehit and set the flag to false after playing it.
+				{
+					balloutoffield.pause();
+					balloutoffield.currentTime = 0;
+					balloutoffield.play();
+					soundFlag = false;
+				}
 				this.serve(pdle===player ? 1 : -1); //depending on wich side wins the ball starts going against that direction.
 				y: 0
 			}
