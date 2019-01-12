@@ -94,9 +94,23 @@ ball = {
 	vel: null,
 	side: 20, //the width and height of the tennis ball
 	speed: 8, //the speed of the tennis ball
-	
+
+serve: function(side) //to give some form of randomness to the serving of the tennis ball.
+{
+	var r =Math.random();
+	this.x = side===1 ? player.x : ai.x - this.side;//to decide which side the ball is to go to.
+	this.y = (HEIGHT - this.side)*r;
+
+	var phi = 0.1*pi*(1 -2*r);// gives a random angle depending on above mentioned r
+	this.vel = 
+	{
+		x: side*this.speed*Math.cos(phi),
+		y: this.speed*Math.sin(phi)
+	}
+},
+
 /*
-tennis ball update and confing to canvas
+tennis ball update and confine to canvas
 */
 	update: function() 
 	{
@@ -127,7 +141,12 @@ tennis ball update and confing to canvas
 				var smash = Math.abs(phi) > 0.2*pi ? 1.5: 1; //if greater than 36 degrees angle give a bonus (multiply 1.5)to speed of the ball. otherwise multiply by 1.0. 
 				this.vel.x = smash*(pdle===player ? 1 : -1)*this.speed*Math.cos(phi);
 				this.vel.y = smash*this.speed*Math.sin(phi);
-				
+			}
+
+			if (0 > this.x+this.side || this.x > WIDTH) //if the ball goes of the field it starts once again from the starting position.
+			{
+				this.serve(pdle===player ? 1 : -1); //depending on wich side wins the ball starts going against that direction.
+				y: 0
 			}
 	},
 
@@ -187,11 +206,7 @@ function init()
 		ball.x = (WIDTH - ball.side)/2;
 		ball.y = (HEIGHT - ball.side)/2;
 
-		ball.vel = //direction of the tennis ball on start. In this case it goes along the x plane.
-		{
-			x: ball.speed, 
-			y: 0
-		}
+		ball.serve(1);
 	}
 
 /*
