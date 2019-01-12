@@ -50,6 +50,7 @@ Player tennis racket update after button press
 	{
 		if (keystate[UpArrow]) this.y -= 7; //after up arrow key is pressed shift on the y plane -7 pixels
 		if (keystate[DownArrow]) this.y += 7; //after down arrow key is pressed shift on the y plane +7 pixels
+		this.y = Math.max(Math.min(this.y, HEIGHT - this.height), 0);//to prevent the tennis racket from going of the canvas
 	},
 
 /*
@@ -74,6 +75,7 @@ ai = {
 	{
 		var  desty = ball.y - (this.height - ball.side)*0.5; //tell the computer to move the tennis racket to the same position as the tennis ball
 		this.y += (desty - this.y) * 0.1; //this slows the speed of the computer down so that it is possible to win (optherwise the computer will always put the tennis racket on the correct path).
+		this.y = Math.max(Math.min(this.y, HEIGHT - this.height), 0);//to prevent the tennis racket from going of the canvas
 	},
 
 /*
@@ -98,7 +100,7 @@ ball = {
 serve: function(side) //to give some form of randomness to the serving of the tennis ball.
 {
 	var r =Math.random();
-	this.x = side===1 ? player.x : ai.x - this.side;//to decide which side the ball is to go to.
+	this.x = side===1 ? player.x+player.width : ai.x - this.side;//to decide which side the ball is to go to.
 	this.y = (HEIGHT - this.side)*r;
 
 	var phi = 0.1*pi*(1 -2*r);// gives a random angle depending on above mentioned r
