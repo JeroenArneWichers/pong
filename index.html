@@ -67,10 +67,14 @@ Computer tennis racket
 ai = {
 	x: null,
 	y:null,
-	width: 20, //the width of the player tennis racket
-	height: 100, //the height of the player tennis racket
+	width: 20, //the width of the computer tennis racket
+	height: 100, //the height of the computer tennis racket
 	
-	update: function() {},
+	update: function() 
+	{
+		var  desty = ball.y - (this.height - ball.side)*0.5; //tell the computer to move the tennis racket to the same position as the tennis ball
+		this.y += (desty - this.y) * 0.1; //this slows the speed of the computer down so that it is possible to win (optherwise the computer will always put the tennis racket on the correct path).
+	},
 
 /*
 computer tennis racket drawing
@@ -89,7 +93,7 @@ ball = {
 	y: null,
 	vel: null,
 	side: 20, //the width and height of the tennis ball
-	speed: 5, //the speed of the tennis ball
+	speed: 8, //the speed of the tennis ball
 	
 /*
 tennis ball update and confing to canvas
@@ -119,8 +123,10 @@ tennis ball update and confing to canvas
 				this.x = pdle===player ? player.x+player.width : ai.x - this.side;
 				var n = (this.y+this.side - pdle.y)/(pdle.height+this.side);
 				var phi = 0.25*pi*(2*n -1); //will give value of pi/4 which is 45. So the angle is 45 degrees for the top part of the tennis racket. And -45 degrees for the bottom part of the tennis racket.
-				this.vel.x = (pdle===player ? 1 : -1)*this.speed*Math.cos(phi);// gives value between
-				this.vel.y = this.speed*Math.sin(phi);
+				
+				var smash = Math.abs(phi) > 0.2*pi ? 1.5: 1; //if greater than 36 degrees angle give a bonus (multiply 1.5)to speed of the ball. otherwise multiply by 1.0. 
+				this.vel.x = smash*(pdle===player ? 1 : -1)*this.speed*Math.cos(phi);
+				this.vel.y = smash*this.speed*Math.sin(phi);
 				
 			}
 	},
