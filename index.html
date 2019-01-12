@@ -6,8 +6,13 @@
     <title>Classic Pong for the 70's fan</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="main.js"></script>
-    <style>
+	<script src="main.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.js"></script>
+	
+	<!-- audio sources -->
+	<audio src="sounds/paddlehit.wav" id="paddlehit"></audio>
+
+	<style>
 
 
 
@@ -33,6 +38,8 @@ Elements of the game
 */
 var canvas, ctx, keystate;
 var player, ai, ball;
+
+var paddlehit = document.getElementById("paddlehit"); //link the variable paddlehit to the source audio above
 
 /*
 Player tennis racket
@@ -132,10 +139,19 @@ tennis ball update and confine to canvas
 		};
 
 		var pdle = this.vel.x < 0 ? player : ai; // to only check the player tennis racket if the tennis ball is going to the player side. And vice versa. 
+		
+		var soundFlag = true; //set the sound flag variable to true.
 		if (AABBIntersect(pdle.x, pdle.y, pdle.width, pdle.height, //To check if the tennis racket intersects with...
 				this.x, this.y, this.side, this.side) //...the tennis ball.
 			) 
 			{
+				if (soundFlag) //if the sound variable is true play the sound associated with varialbe paddlehit and set the flag to false after playing it.
+				{
+					paddlehit.pause();
+					paddlehit.currentTime = 0;
+					paddlehit.play();
+					soundFlag = false;
+				}
 				this.x = pdle===player ? player.x+player.width : ai.x - this.side;
 				var n = (this.y+this.side - pdle.y)/(pdle.height+this.side);
 				var phi = 0.25*pi*(2*n -1); //will give value of pi/4 which is 45. So the angle is 45 degrees for the top part of the tennis racket. And -45 degrees for the bottom part of the tennis racket.
@@ -173,11 +189,11 @@ function main()
 		document.body.appendChild(canvas);
 
 		keystate = {};
-		document.addEventListener("keydown", function(evt) 
+		document.addEventListener("keydown", function(evt) //to watch out if a key has been pressed or not
 		{
 			keystate[evt.keyCode] = true;
 		});
-		document.addEventListener("keyup", function(evt) 
+		document.addEventListener("keyup", function(evt) //to watch out if the key has been let up again or not
 		{
 			delete keystate [evt.keyCode];
 		});
@@ -230,19 +246,19 @@ function draw()
 		
 		ctx.save();
 		
-		ctx.fillStyle = "#fff";
+		ctx.fillStyle = "#fff"; //the color of the fill option 
 		
 		ball.draw();
 		player.draw();
 		ai.draw();
 
-		var w = 4;
-		var x = (WIDTH - w)*0.5;
-		var y = 0;
-		var step = HEIGHT/20;
+		var w = 4; //the variables for the net
+		var x = (WIDTH - w)*0.5; //the variables for the net
+		var y = 0; //the variables for the net
+		var step = HEIGHT/20; //the variables for the net
 		while (y< HEIGHT)
 			{
-				ctx.fillRect(x, y+step*0.25, w, step*0.5);
+				ctx.fillRect(x, y+step*0.25, w, step*0.5); //sets the gaps between the net stripes
 				y += step;
 			}
 
