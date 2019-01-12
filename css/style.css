@@ -1,0 +1,32 @@
+/* canvas game
+--------------------------------*/
+canvas {
+  display: block;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+/* body
+--------------------------------*/
+
+body 
+{
+  background-color: brown;
+}
+
+/* buttons
+--------------------------------*/
+
+.buttonwrapper {
+  text-align: center;
+  margin-top: 60px;
+}
+
+.button {
+  position: absolute;
+}
+
