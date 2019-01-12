@@ -12,6 +12,7 @@
 	<!-- audio sources -->
 	<audio src="sounds/paddlehit.wav" id="paddlehit"></audio>
 	<audio src="sounds/ballhitwall.wav" id="ballhitwall"></audio>
+	<audio src="sounds/balloutoffield.wav" id="balloutoffield"></audio>
 
 	<style>
 
@@ -42,6 +43,7 @@ var player, ai, ball;
 
 var paddlehit = document.getElementById("paddlehit"); //link the variable paddlehit to the source audio above
 var ballhitwall = document.getElementById("ballhitwall");
+var balloutoffield = document.getElementById("balloutoffield");
 
 /*
 Player tennis racket
@@ -133,9 +135,9 @@ tennis ball update and confine to canvas
 		{
 			if (soundFlag) //if the sound variable is true play the sound associated with varialbe paddlehit and set the flag to false after playing it.
 				{
-					paddlehit.pause();
-					paddlehit.currentTime = 0;
-					paddlehit.play();
+					ballhitwall.pause();
+					ballhitwall.currentTime = 0;
+					ballhitwall.play();
 					soundFlag = false;
 				}
 			var offset = this.vel.y < 0 ? 0 - this.y : HEIGHT - (this.y+this.side); 
@@ -171,6 +173,7 @@ tennis ball update and confine to canvas
 				this.vel.y = smash*this.speed*Math.sin(phi);
 			}
 
+			var soundFlag = true; //set the sound flag variable to true.
 			if (0 > this.x+this.side || this.x > WIDTH) //if the ball goes of the field it starts once again from the starting position.
 			{
 				this.serve(pdle===player ? 1 : -1); //depending on wich side wins the ball starts going against that direction.
