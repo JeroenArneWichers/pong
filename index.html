@@ -32,20 +32,17 @@
 <body>
 	
 <div class="buttonwrapper">
-	<button class="start btn btn-warning" onclick="main()">Start the game</button>
+	<button class="start btn btn-warning" onclick="game(); this.onclick=null;">Start the game</button>
 	<button class="muteUnmute btn btn-warning" onclick="muteSound.muteButton()">Mute/Unmute the disco</button>
-	<button id="stopgame" class="stop btn btn-warning" onclick="stopgame()">Stop the game</button>
+	<button id="stop" class="stop btn btn-warning" onclick="stop()">Stop the game</button>
 	<!-- <button id="button" class="play btn btn-warning">Start and Stop the Disco</button> -->
 </div>
 
 
 <script>
 
-document.getElementById('stopgame').onclick = function() 
+function game()
 {
-	$(this).off();
-};
-
 
 
 var sound = new Howl({
@@ -328,7 +325,8 @@ function draw()
 /*
 start and run the game
 */
-
+main();
+}
 </script>
 
 <!-- Optional JavaScript -->
