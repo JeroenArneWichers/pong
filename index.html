@@ -28,13 +28,47 @@
     <!-- animate on scroll -->	
 	<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
+	<!-- google font -->
+	<link href="https://fonts.googleapis.com/css?family=Share+Tech+Mono" rel="stylesheet">
+
 </head>
 <body>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-3">
+			<div class="card m-2" style="">
+				<img class="card-img-top" src="./img/pongad1.jpg" alt="Card image cap">
+				<div class="card-body">
+					<h5 class="card-title">PONG</h5>
+					<p class="card-text">The iconic and classic game from the 70's.</p>
+					<p>Pong is one of the earliest arcade video games. It is a table tennis sports game featuring simple two-dimensional graphics.</p>
+					<p>The game was originally manufactured by Atari, which released it in 1972. Allan Alcorn created Pong as a training exercise assigned to him by Atari co-founder Nolan Bushnell.</p>
+					<p>Bushnell and Atari co-founder Ted Dabney were surprised by the quality of Alcorn's work and decided to manufacture the game.</p>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-6">
+		</div>
+		<div class="col-lg-3">
+			<div class="card m-2" style="">
+				<img class="card-img-top" src="./img/pongad2.jpg" alt="Card image cap">
+				<div class="card-body">
+					<p>Pong was the first commercially successful video game, which helped to establish the video game industry.</p>
+					<p>Soon after its release, several companies began producing games that copied its gameplay, and eventually released new types of games.</p>
+					<p>During the 1975 Christmas season, Atari released a home version of Pong exclusively through Sears retail stores.</p>
+					<p>It also was a commercial success and led to numerous copies.</p>
+					<p>Pong is part of the permanent collection of the Smithsonian Institution in Washington, D.C. due to its cultural impact.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 	
 <div class="buttonwrapper">
 	<button class="start btn btn-warning" onclick="game(); this.onclick=null;">Start the game</button>
 	<button class="muteUnmute btn btn-warning" onclick="muteSound.muteButton()">Mute/Unmute the disco</button>
-	<button id="stop" class="stop btn btn-warning" onclick="stop()">Stop the game</button>
+	<button id="stop" class="stop btn btn-warning" onclick="">Stop the game</button>
 	<!-- <button id="button" class="play btn btn-warning">Start and Stop the Disco</button> -->
 </div>
 
@@ -327,6 +361,7 @@ start and run the game
 */
 main();
 }
+
 </script>
 
 <!-- Optional JavaScript -->
