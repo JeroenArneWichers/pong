@@ -78,7 +78,9 @@ var isRunning = false;
 // function game()
 // {
 
-
+/*
+set start music
+*/
 var sound = new Howl({
 	src: ['sounds/italiandisco.mp3'],
 	autoplay: true,
@@ -178,6 +180,11 @@ ball = {
 	vel: null,
 	side: 20, //the width and height of the tennis ball
 	speed: 8, //the speed of the tennis ball
+	pS: 0, //player score start value
+	psX: 173,//player score position
+	aS: 0, //computer score start value
+	asX: 519,//computer score position
+	sY: 80,//score position from the top
 
 serve: function(side) //to give some form of randomness to the serving of the tennis ball.
 {
@@ -244,6 +251,18 @@ tennis ball update and confine to canvas
 				this.vel.y = smash*this.speed*Math.sin(phi);
 			}
 
+			if (0 > this.x+this.side) 
+			{
+				this.serve(pdle===player ? 1 : 1);
+				this.aS += 1;
+			}
+
+			if (this.x > WIDTH) 
+			{
+				this.serve(pdle===player ? -1 : -1);
+				this.pS += 1;
+			}
+
 			var soundFlag = true; //set the sound flag variable to true.
 			if (0 > this.x+this.side || this.x > WIDTH) //if the ball goes of the field it starts once again from the starting position.
 			{
@@ -265,6 +284,8 @@ tennis ball drawing
 	draw: function() 
 		{
 		ctx.fillRect(this.x, this.y, this.side, this.side); //Tell it to create/draw a rectangle using the width and height as paramaters
+		ctx.fillText(this.pS,this.psX,this.sY); //score text for the player
+		ctx.fillText(this.aS,this.asX,this.sY); //score text
 		}
 	};
 
@@ -340,6 +361,7 @@ function draw()
 		ctx.save();
 		
 		ctx.fillStyle = "#fff"; //the color of the fill option 
+		ctx.font = "30px Arial"; //style of the text used in th canvas
 		
 		ball.draw();
 		player.draw();
@@ -353,6 +375,23 @@ function draw()
 			{
 				ctx.fillRect(x, y+step*0.25, w, step*0.5); //sets the gaps between the net stripes
 				y += step;
+
+				if (ball.pS > 10) //if the player score is above 10 display you win
+				{
+					ctx.fillStyle = "#000";
+					ctx.fillRect(0, 0, WIDTH, HEIGHT);
+					ctx.fillStyle = "#fff";
+					ctx.fillText("You Win",(WIDTH/2)-50,HEIGHT/4);
+					ball.aS = 0;
+				}
+				if (ball.aS > 10) //if the computer score is above 10 display you lose
+				{
+					ctx.fillStyle = "#000";
+					ctx.fillRect(0, 0, WIDTH, HEIGHT);
+					ctx.fillStyle = "#fff";
+					ctx.fillText("You Lose",(WIDTH/2)-50,HEIGHT/4);
+					ball.pS = 0;
+				}
 			}
 
 		ctx.restore();
