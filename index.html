@@ -66,17 +66,17 @@
 </div>
 	
 <div class="buttonwrapper">
-	<button class="start btn btn-warning" onclick="game(); this.onclick=null;">Start the game</button>
+	<button class="start btn btn-warning" onclick="isRunning=true">Start the game</button>
 	<button class="muteUnmute btn btn-warning" onclick="muteSound.muteButton()">Mute/Unmute the disco</button>
-	<button id="stop" class="stop btn btn-warning" onclick="">Stop the game</button>
+	<button id="stop" class="stop btn btn-warning" onclick="isRunning = false">Stop the game</button>
 	<!-- <button id="button" class="play btn btn-warning">Start and Stop the Disco</button> -->
 </div>
 
 
 <script>
-
-function game()
-{
+var isRunning = false;
+// function game()
+// {
 
 
 var sound = new Howl({
@@ -323,9 +323,11 @@ update all the game objects
 */
 function update() 
 	{
-		ball.update();
-		player.update();
-		ai.update();
+		if(isRunning){
+			ball.update();
+			player.update();
+			ai.update();
+		}
 	}
 
 /*
@@ -360,8 +362,8 @@ function draw()
 start and run the game
 */
 main();
-}
-
+// }
+// game();
 </script>
 
 <!-- Optional JavaScript -->
