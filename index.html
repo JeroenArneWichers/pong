@@ -68,7 +68,7 @@
 <div class="buttonwrapper">
 	<button class="start btn btn-warning" onclick="isRunning=true">Start the game</button>
 	<button class="muteUnmute btn btn-warning" onclick="muteSound.muteButton()">Mute/Unmute the disco</button>
-	<button id="stop" class="stop btn btn-warning" onclick="isRunning = false">Stop the game</button>
+	<button id="stop" class="stop btn btn-warning" onclick="isRunning = false">Pause the game</button>
 	<button class="btn btn-warning" onClick="window.location.reload()">Start from scratch</button>
 	<!-- <button id="button" class="play btn btn-warning">Start and Stop the Disco</button> -->
 </div>
@@ -252,16 +252,14 @@ tennis ball update and confine to canvas
 				this.vel.y = smash*this.speed*Math.sin(phi);
 			}
 
-			if (0 > this.x+this.side) 
+			if (0 > this.x+this.side) //if the tennis ball goes of the left hand side do the following...
 			{
-				this.serve(pdle===player ? 1 : 1);
-				this.aS += 1;
+				this.aS += 1; //add 1 to the variable aS(computer score)
 			}
 
 			if (this.x > WIDTH) 
 			{
-				this.serve(pdle===player ? -1 : -1);
-				this.pS += 1;
+				this.pS += 1; //add 1 to the variable pS(player score)
 			}
 
 			var soundFlag = true; //set the sound flag variable to true.
